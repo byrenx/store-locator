@@ -1,0 +1,6 @@
+.appengine_data
+*.pyc
+*~
+#*#
+*#
+
