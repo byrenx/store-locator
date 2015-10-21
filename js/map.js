@@ -22,7 +22,8 @@ $(function(){
 
 	var user_location = 'Ayala Triangle Walkways, Makati, Metro Manila, Philippines';
 	var store_markers = {};
-	var user_marker, map, geocoder, service;
+	var distances = [];
+	var user_marker, map, geocoder, service, directionsService, directionsDisplay;
 
 	function initialize(){
 	   var mapOptions = {
@@ -36,6 +37,11 @@ $(function(){
 	   //geocoder
 	   geocoder = new google.maps.Geocoder();
 	   service =  new google.maps.DistanceMatrixService();
+	   directionsService = new google.maps.DirectionsService();
+
+	   directionsDisplay = new google.maps.DirectionsRenderer();
+	   directionsDisplay.setMap(map);
+	   directionsDisplay.setPanel(document.getElementById('directions-panel')); 
 	   initStoreMarkers();
 	   initUserMarker();
 	   calculateDistances();
@@ -117,8 +123,15 @@ $(function(){
 	  	}
 
 	  	function callback(response, status){
+	  		console.log(response);
 	  		if (status == google.maps.DistanceMatrixStatus.OK){
-	  			view.renderDistances(response);
+	  			for(var i=0; i<response.destinationAddresses.length; i++){
+	  				distances.push({address: response.destinationAddresses[i],
+	  								distance_time: response.rows[0].elements[i]});
+	  			}
+	  			console.log(distances);
+	  			distances.sort(function(a, b){ return a.distance_time.distance.value-b.distance_time.distance.value});
+	  			view.renderDistances(distances);
 	  		}
 	  	}
 
@@ -133,15 +146,57 @@ $(function(){
 	  	},callback);
 	}
 
+
+	function showDirections(origin, destination) {
+		 var request = {
+		     origin : origin,
+		     destination : destination,
+		     travelMode : google.maps.DirectionsTravelMode.DRIVING
+		 }
+		 directionsService.route(request, function(response, status) {
+		    if(status == google.maps.DirectionsStatus.OK) {
+		     directionsDisplay.setDirections(response);
+		    }
+		 });
+	}
+
+
+
 	var view = {
 		renderDistances: function(results){
-			$('#directions-panel').append('Origin: ' + results.origin_addresses[0] + '<br>')
-				.append('<strong>To :</strong><br>');
-			for(var i=0; i<results.destination_addresses.length; i++){
-				$('#directions-panel')
-					.appen(results.destination_addresses[i] + ' = ' + results.rows.elements[i].distance.text + '<br>');
-			}
+			var distance_table = $('<table>');
+			distance_table.addClass('bordered');
+			var header = $('<thead>');
+			header_row = $('<tr>');
+			header_row.append($('<th>').html('Location'));
+			header_row.append($('<th>').html('Distance'));
+			header.append(header_row);
 
+			var tbody = $('<tbody>');
+			for(var i=0; i<results.length; i++){
+				var dest = $('<td>');
+				dest.html(results[i].address);
+				var dist = $('<td>');
+				dist.html(results[i].distance_time.distance.text);
+				var tr = $('<tr>');
+				tr.append(dest);
+				tr.append(dist);
+				tbody.append(tr);
+
+				tr.click((function(start, destination){
+					return function(){
+						showDirections(start, destination);
+						current_tr = $(this);
+						$('table tr').each(function(){
+							$(this).css('background-color', 'white');	
+						});
+						$(this).css('background-color', 'red');
+					}
+				})(user_location, results[i].address));
+			}
+			distance_table.append(header_row);
+			distance_table.append(tbody);
+			$("#distances").append(distance_table);
 		}
 
 	};

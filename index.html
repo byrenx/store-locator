@@ -5,31 +5,29 @@
     <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
     <meta charset="utf-8">
     <style>
-      html, body {
+      /*html, body {
         margin: 0;
         padding: 0;
         height: 100%;
-      }   
+      }   */
     </style>
-   
+   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.1/css/materialize.min.css">
+
+  <!-- Compiled and minified JavaScript -->
   </head>
   <body>
-    <!-- <div id="top_content">
-  				Origin:<input id="origin" type="text" />
-  				Destination:<input id="destination" type="text" />
-  				 <input type="button" value="Get Me Directions" onClick="showDirections();" >
-    </div> -->
-    <table width="100%" height="100%"> 
-      <tr>
-        <td id="map-canvas" style="width:70%; height:100%;"></td>
-        <td id="directions-panel" style="width:30%; height:100%;">Directions displayed here:</td>	
-      </tr>
-   </table>
-
+    <div class="row">
+      <div id="map-canvas" class="col s8" style="height: 650px"></div>
+      <div id="panel" class="col s4" style="height:650px;">
+        <div id="distances" style="height: 400px; overflow: auto;"></div>
+        <div id="directions-panel" style="height: 250;"></div>
+      </div>
+    </div>
     <script src="https://maps.googleapis.com/maps/api/js?v=3.exp"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
     <script src="/js/stores.js"></script>
     <script src="/js/map.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.1/js/materialize.min.js"></script>
   </body>
 </html>      	
       	
