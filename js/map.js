@@ -193,6 +193,7 @@ $(function(){
 						$(this).css('background-color', 'red');
 					}
 				})(user_location, results[i].address));
+				tr.css('cursor', 'pointer');
 			}
 			distance_table.append(header_row);
 			distance_table.append(tbody);
