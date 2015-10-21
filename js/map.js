@@ -1,4 +1,12 @@
 $(function(){
+	
+	var ICONS = {destination:'https://chart.googleapis.com/chart?chst=d_map_pin_letter&chld=D|FF0000|000000',
+				 origin:'https://chart.googleapis.com/chart?chst=d_map_pin_letter&chld=O|FFFF00|000000'};
+
+	var user_location = 'Ayala Triangle Walkways, Makati, Metro Manila, Philippines';
+	var store_markers = {};
+	var distances = [];
+	var user_marker, map, geocoder, service, directionsService, directionsDisplay;
 	//var stores = Stores;
 	var stores =['Resort Dr, Pasay, Metro Manila, Philippines',
 				 '1 Palm Ave, Makati, 1220 Metro Manila, Philippines',
@@ -17,13 +25,7 @@ $(function(){
 				 'Orcullo Street, Kawit, Cavite, Philippines'
 	];
 
-	var ICONS = {destination:'https://chart.googleapis.com/chart?chst=d_map_pin_letter&chld=D|FF0000|000000',
-				 origin:'https://chart.googleapis.com/chart?chst=d_map_pin_letter&chld=O|FFFF00|000000'};
-
-	var user_location = 'Ayala Triangle Walkways, Makati, Metro Manila, Philippines';
-	var store_markers = {};
-	var distances = [];
-	var user_marker, map, geocoder, service, directionsService, directionsDisplay;
+	
 
 	function initialize(){
 	   var mapOptions = {
@@ -110,10 +112,7 @@ $(function(){
 		}, 6000);
 	}
 
-	function displayNClosestCtore(n){
-
-	}
-
+	
 	function calculateDistances(){
 		var unitSys = 'mi';
 		if(unitSys == "mi") {
